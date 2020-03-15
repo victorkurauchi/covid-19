@@ -255,7 +255,7 @@ function DiceRoll({ age }) {
 
 ////////////////////////////////////////////////////////////////////////////////
 function KillCount({ ages }) {
-  let [infected, setInfected] = useState(1)
+  let [infected, setInfected] = useState(2)
   let [weeks, setWeeks] = useState(1)
   let rate = 0.034
   let Ro = 2
@@ -299,20 +299,28 @@ function Killers() {
         <p>
           Social distancing is about how many people you want to kill (I hope
           that's zero). Right now, a COVID-19 infected person infects two more.
+          And since you don't show symptoms for two weeks you don't even know
+          you're doing it.
         </p>
-        <p>
-          So you infect two people, and next week they infect two people each,
-          and then they infect two more, etc. etc.
-        </p>
-        <p>Go ahead and click the button</p>
       </div>
       <KillCount ages={ages} />
       <p>
+        So you infect two people, and next week they infect two people each, and
+        then they infect two more, etc. etc.
+      </p>
+      <p>
+        So let's say you just came home with the virus. Go ahead and click the
+        button once. Now you and two people in your family are infected. Now
+        keep clicking it to see how many people's deaths you could have avoided
+        by staying home.
+      </p>
+      <p>
         So please, stay home. And while you're there{" "}
-        <a href="https://medium.com/@joschabach/flattening-the-curve-is-a-deadly-delusion-eea324fe9727">
-          I think this article is worth your time.
+        <a href="https://www.washingtonpost.com/graphics/2020/world/corona-simulator/">
+          I think this article is worth your time
         </a>
-        . Containment seems to be the best action right now given the numbers.
+        . Extreme social distancing, the kind that feels like "overreacting"
+        seems to be our only option right now.
       </p>
       <hr />
       <h2>More information</h2>
@@ -330,8 +338,8 @@ function Killers() {
         is so important.
       </p>
       <p>
-        You just saw that logarithmic growth is a powerful thing. The
-        coronavirus is following a nearly perfect logarithmic curve in the
+        You just saw that exponential growth is a powerful thing. The
+        coronavirus is following a nearly perfect exponential curve in the
         US--even with our low levels of testing. While network marketers hope to
         use it in their favor to gain financial independence, a virus doesn't
         have to be convinced to keep the downline going.
@@ -356,6 +364,18 @@ function Killers() {
         studies have it as high as 4!). By comparison, the flu is 1.3 and
         anything less than 1 will just die off.
       </p>
+      <p>
+        Our numbers are following behind Italy's perfectly. There should be no
+        doubt in any thinking person's mind that the only way to avoid killing
+        untold numbers of people is to practice extreme social distancing{" "}
+        <i>now</i>–even before the government tells you to.
+      </p>
+      <img
+        style={{ width: "100%" }}
+        alt="chart showing US's nearly identical numbers to Italy, just 10 days behind"
+        src="/chart.jpg"
+      />
+      <h2 className="center">STAY HOME PLZ 😇</h2>
     </div>
   )
 }
@@ -390,5 +410,14 @@ function AppRoot() {
 export default () => (
   <BrowserRouter>
     <AppRoot />
+    <p className="center">
+      <small>
+        Made by Ryan Florence
+        <br />
+        Anybody can use anything from this for whatever they want.
+        <br />
+        It's on <a href="https://github.com/ryanflorence/covid-19">GitHub</a>
+      </small>
+    </p>
   </BrowserRouter>
 )
