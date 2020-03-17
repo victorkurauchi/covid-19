@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react"
+import React, { useState, useEffect, useRef, useMemo, Suspense } from "react"
 import serializeForm from "form-serialize"
 import {
   BrowserRouter,
@@ -9,7 +9,14 @@ import {
   Link
 } from "react-router-dom"
 
+import './i18n';
+import { useTranslation } from 'react-i18next';
+import logo from './logo.svg';
+import './App.css';
+
 function App() {
+  const { t, i18n } = useTranslation();
+
   let [persons, setPersons] = useState(4)
   let doFocusRef = useRef(false)
   let focusRef = useRef()
@@ -35,13 +42,9 @@ function App() {
   return (
     <div id="App">
       <div className="prelude">
-        <h1>Social Distancing</h1>
+        <h1>{t('Social Distancing')}</h1>
         <p>
-          Many people close to me are skeptical that covid-19 is a big deal.
-          I've made this illustration to show how your action will affect you,
-          your household, and the community around you. All equations are based
-          on the latest infection growth and fatality rates of the virus as of
-          March 14, 2020.
+          {t('Covid Disclaimer')}
         </p>
       </div>
       <hr />
@@ -52,24 +55,25 @@ function App() {
             ref={arr.length - 1 === index ? focusRef : undefined}
           >
             <span>
-              {index === 0 ? "Your age" : `Household Member ${index}`}:
+              {index === 0 ? t('Your age') : `${t('Household Member')} ${index}`}:
             </span>{" "}
             <AgeSelect defaultValue={index < 2 ? 40 : undefined} />
           </label>
         ))}
         <button type="button" onClick={() => setPersons(persons + 1)}>
-          Add another
+          {t('Add another')}
         </button>
-        <button type="submit">Next</button>
+        <button type="submit">{t('Next')}</button>
       </form>
     </div>
-  )
+  );
 }
 
 function AgeSelect(props) {
+  const { t, i18n } = useTranslation();
   return (
     <select name="ages" {...props}>
-      <option value="UNSET">- set an age</option>
+      <option value="UNSET">- {t('set an age')}</option>
       {Array.from({ length: 100 }).map((_, index) => (
         <option key={index}>{index}</option>
       ))}
@@ -79,6 +83,7 @@ function AgeSelect(props) {
 
 ////////////////////////////////////////////////////////////////////////////////
 function Infection() {
+  const { t, i18n } = useTranslation();
   let location = useLocation()
   let navigate = useNavigate()
   let ages = parseAges(location.search)
@@ -90,10 +95,9 @@ function Infection() {
   return (
     <div id="App">
       <div className="prelude">
-        <h1>You're Infected</h1>
-        <p>
-          Let's roll the dice and see if it kills any of your family. It
-          probably won't.
+        <h1>{t(`You're Infected`)}</h1>
+        <p>{t(`Let's roll the dice and see if it kills any of your family It probably won't`)}.
+          
         </p>
       </div>
       <div id="DiceRolls" className="center">
@@ -102,16 +106,14 @@ function Infection() {
         ))}
       </div>
       <p>
-        As expected, you probably didn't die. But it's not about you. Let's look
-        at how many people your family is going to kill by not practicing social
-        distancing.
+        {t('DisclaimerNotAboutYou')}
       </p>
       <Link className="big-link" to={`/killers${location.search}`}>
-        Your Kill Count ▸
+        {t('Your Kill Count')} ▸
       </Link>
 
       <hr />
-      <h2>More information</h2>
+      <h2>{t('More information')}</h2>
       <p>
         Unless you're over 60, or are immuno-comprimised{" "}
         <i>(lots of your friends and family are!)</i> you're going to have to
@@ -135,21 +137,21 @@ function Infection() {
         numbers. In this case, we need to look at:
       </p>
       <ul>
-        <li>Fatality Rate</li>
-        <li>Infection Growth Rate</li>
+        <li>{t('Fatality Rate')}</li>
+        <li>{t('Infection Growth Rate')}</li>
       </ul>
       <p>
-        The flu has a general fatality rate of 0.1%
+        {t('The flu has a general fatality rate of')} 0.1%
         <br />
-        COVID-19's fatality rate right now is 3.4%
+        {t(`COVID-19's fatality rate right now is`)} 3.4%
       </p>
       <p>
         <b>
           <a href="https://www.sciencealert.com/covid-19-s-death-rate-is-higher-than-thought-but-it-should-drop">
-            That's 34x
+            {t(`That's 34x`)}
           </a>
         </b>
-        . The red bar here is 34 times bigger.
+        . {t('The red bar here is 34 times bigger')}.
       </p>
 
       <div className="bars">
@@ -192,6 +194,7 @@ let rates = [
 ]
 
 function DiceRoll({ age }) {
+  const { t, i18n } = useTranslation();
   let [state, setState] = useState("alive") // alive, dead, rolling
   let [rolls, setRolls] = useState(0)
 
@@ -238,16 +241,16 @@ function DiceRoll({ age }) {
             : null}
         </span>{" "}
         <span>
-          <b>{age} year old</b>
+          <b>{age} {t('year old')}</b>
           <br />
-          Fatality Rate: {(rate * 100).toFixed(1)}%
+          {t('Fatality Rate')}: {(rate * 100).toFixed(1)}%
         </span>
       </div>
       <div>
         <button disabled={state === "dead"} onClick={rollDice}>
-          Roll the dice
+          {t('Roll the dice')}
         </button>{" "}
-        <span>Rolls: {rolls}</span>
+        <span>{t('Rolls')}: {rolls}</span>
       </div>
     </div>
   )
@@ -255,6 +258,7 @@ function DiceRoll({ age }) {
 
 ////////////////////////////////////////////////////////////////////////////////
 function KillCount({ ages }) {
+  const { t, i18n } = useTranslation();
   let [infected, setInfected] = useState(2)
   let [weeks, setWeeks] = useState(1)
   let rate = 0.034
@@ -275,15 +279,16 @@ function KillCount({ ages }) {
           <span key={index}>💀</span>
         ))}
       </div>
-      <p>Week: {weeks}</p>
-      <p>People You Infected: {infected}</p>
-      <p>People You Killed: {killed}</p>
-      <button onClick={nextWeek}>Live another week</button>
+      <p>{t('Week')}: {weeks}</p>
+      <p>{t('People You Infected')}: {infected}</p>
+      <p>{t('People You Killed')}: {killed}</p>
+      <button onClick={nextWeek}>{t('Live another week')}</button>
     </div>
   )
 }
 
 function Killers() {
+  const { t, i18n } = useTranslation();
   let location = useLocation()
   let navigate = useNavigate()
   let ages = parseAges(location.search)
@@ -295,54 +300,43 @@ function Killers() {
   return (
     <div id="App">
       <div className="prelude">
-        <h1>Your Kill Count</h1>
+        <h1>{t('Your Kill Count')}</h1>
         <p>
-          Social distancing is about how many people you want to kill (I hope
-          that's zero). Right now, a COVID-19 infected person infects two more.
-          And since you don't show symptoms for two weeks you don't even know
-          you're doing it.
+          {t('Social Distancing Description')}.
         </p>
       </div>
       <KillCount ages={ages} />
-      <p>
-        So you infect two people, and next week they infect two people each, and
-        then they infect two more, etc. etc.
+      <p>{t('killcountdescription.part1')}
+        {/* So you infect two people, and next week they infect two people each, and
+        then they infect two more, etc. etc. */}
       </p>
       <p>
-        So let's say you just came home with the virus. Go ahead and click the
+      {t('killcountdescription.part2')}
+        {/* So let's say you just came home with the virus. Go ahead and click the
         button once. Now you and two people in your family are infected. Now
         keep clicking it to see how many people's deaths you could have avoided
-        by staying home.
+        by staying home. */}
       </p>
       <p>
-        So please, stay home. And while you're there{" "}
+        {t(`So please, stay home And while you're there`)}{" "}
         <a href="https://www.washingtonpost.com/graphics/2020/world/corona-simulator/">
-          I think this article is worth your time
+          {t(`I think this article is worth your time`)}
         </a>
-        . Extreme social distancing, the kind that feels like "overreacting"
-        seems to be our only option right now.
+        . {t('Extreme social distancing, the kind that feels like overreacting seems to be our only option right now')}.
       </p>
       <hr />
-      <h2>More information</h2>
+      <h2>{t('More information')}</h2>
       <p>
         <Link to={`/infected${location.search}`}>
-          On the previous page we looked at the fatality rate
+          {t('On the previous page we looked at the fatality rate')}
         </Link>{" "}
-        of COVID-19 and saw that statistically, you and your family will
-        probably be fine, but social distancing isn't about you.
+        {t(`of COVID-19 and saw that statistically, you and your family will probably be fine, but social distancing isn't about you`)}.
       </p>
       <p>
-        What really sucks about this virus vs. the flu is that you can carry it
-        around with you for weeks infecting people before you even know you have
-        it. There is no way to know until it's too late. That's why containment
-        is so important.
+        {t('statistics.part1')}
       </p>
       <p>
-        You just saw that exponential growth is a powerful thing. The
-        coronavirus is following a nearly perfect exponential curve in the
-        US--even with our low levels of testing. While network marketers hope to
-        use it in their favor to gain financial independence, a virus doesn't
-        have to be convinced to keep the downline going.
+      {t('statistics.part2')}
       </p>
       <a
         style={{ display: "block", border: "solid 1px" }}
@@ -358,24 +352,20 @@ function Killers() {
         The <i>Attack Rate</i> of COVID-19 is estimated by the World Health
         Organization to be{" "}
         <a href="https://www.worldometers.info/coronavirus/#repro">
-          between 1.4 and 2.5
+          {t('between')} 1.4 {t('and')} 2.5
         </a>
-        . That means if you get it, you're going to infect 2 other people (other
-        studies have it as high as 4!). By comparison, the flu is 1.3 and
-        anything less than 1 will just die off.
+        . {t('statistics.part3')}
       </p>
-      <p>
-        Our numbers are following behind Italy's perfectly. There should be no
-        doubt in any thinking person's mind that the only way to avoid killing
-        untold numbers of people is to practice extreme social distancing{" "}
-        <i>now</i>–even before the government tells you to.
+      <p>{t('statistics.part4')}
+        {" "}
+        <i>{t('now')}</i>– {t('even before the government tells you to')}.
       </p>
       <img
         style={{ width: "100%" }}
         alt="chart showing US's nearly identical numbers to Italy, just 10 days behind"
         src="/chart.jpg"
       />
-      <h2 className="center">STAY HOME PLZ 😇</h2>
+      <h2 className="center">{t('STAY HOME PLZ')} 😇</h2>
     </div>
   )
 }
@@ -407,17 +397,43 @@ function AppRoot() {
   )
 }
 
+const Loader = () => (
+  <div className="App">
+    <img src={logo} className="App-logo" alt="logo" />
+    <div>loading...</div>
+  </div>
+);
+
+function AvailableLanguages() {
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = lng => {
+    i18n.changeLanguage(lng);
+  };
+
+  return (
+    <div style={{ float: 'right' }}>
+      <button className="button-flag" onClick={(e) => { e.preventDefault(); changeLanguage('pt-br') }}>🇧🇷</button>
+      <button className="button-flag" onClick={(e) => { e.preventDefault(); changeLanguage('en')}}>🇺🇸</button>
+    </div>
+  )
+}
 export default () => (
-  <BrowserRouter>
-    <AppRoot />
-    <p className="center">
-      <small>
-        Made by Ryan Florence
-        <br />
-        Anybody can use anything from this for whatever they want.
-        <br />
-        It's on <a href="https://github.com/ryanflorence/covid-19">GitHub</a>
-      </small>
-    </p>
-  </BrowserRouter>
+  <Suspense fallback={<Loader />}>
+    <BrowserRouter>
+      <AppRoot />
+      <p className="center">
+        <small>
+          Made by Ryan Florence
+          <br />
+          Anybody can use anything from this for whatever they want.
+          <br />
+          It's on <a href="https://github.com/ryanflorence/covid-19">GitHub</a>
+        </small>
+      </p>
+
+      <AvailableLanguages/>
+      
+    </BrowserRouter>
+  </Suspense>
 )

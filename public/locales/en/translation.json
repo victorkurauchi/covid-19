@@ -1,0 +1,13 @@
+{
+  "title": "Welcome to react using react-i18next",
+  "Welcome to React": "Welcome to React and react-i18next",
+  "Social Distancing": "Social Distancing",
+  "Covid Disclaimer": "Many people close to me are skeptical that covid-19 is a big deal. I've made this illustration to show how your action will affect you, your household, and the community around you. All equations are based on the latest infection growth and fatality rates of the virus as of March 14, 2020.",
+  "DisclaimerNotAboutYou": "As expected, you probably didn't die. But it's not about you. Let's look at how many people your family is going to kill by not practicing social distancing.",
+  "statistics": {
+    "part1": "O que é realmente péssimo sobre esse vírus versus a gripe é que você pode carregá-lo por aí com você por semanas infectando pessoas antes mesmo de saber que você tem isto. Não há como saber até que seja tarde demais. É por isso que a contenção é tão importante.",
+    "part2": "You just saw that exponential growth is a powerful thing. The coronavirus is following a nearly perfect exponential curve in the US--even with our low levels of testing. While network marketers hope to use it in their favor to gain financial independence, a virus doesn't have to be convinced to keep the downline going.",
+    "part3": "That means if you get it, you're going to infect 2 other people (other studies have it as high as 4!). By comparison, the flu is 1.3 and anything less than 1 will just die off.",
+    "part4": "Our numbers are following behind Italy's perfectly. There should be no doubt in any thinking person's mind that the only way to avoid killing untold numbers of people is to practice extreme social distancing"
+  }
+}
